@@ -13,20 +13,18 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.CubicCurve;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import javafx.beans.value.ChangeListener;
-import javafx.scene.control.TableView;
 
 import javafx.scene.text.Text;
 
@@ -38,6 +36,8 @@ public class Main extends Application {
     private TableView<Book> table;
     private ObservableList<Book> data;
     private Text actionStatus;
+    private ComboBox<String> groupType;
+    private ComboBox<String> taxType;
 
 
     @Override
@@ -55,6 +55,8 @@ public class Main extends Application {
         actionStatus.setFill(Color.FIREBRICK);
         // Table view, data, columns and properties
         table = new TableView();
+        groupType = new ComboBox<>();
+        taxType = new ComboBox<>();
         data = getInitialTableData();
         table.setItems(data);
         table.setEditable(true);
@@ -83,7 +85,7 @@ public class Main extends Application {
                 return; // invalid data
             }
             Book book = (Book) data.get(ix);
-            actionStatus.setText(book.toString());
+//            actionStatus.setText(book.toString());
         }));
         // Add and delete buttons
         Button addbtn = new Button("Add");
@@ -101,7 +103,7 @@ public class Main extends Application {
         VBox vbox = new VBox(20);
         vbox.setPadding(new Insets(25, 25, 25, 25));
         ;
-        vbox.getChildren().addAll(hb, table, buttonHb, actionStatus);
+        vbox.getChildren().addAll(hb, taxType, groupType, table, buttonHb, actionStatus);
         // Scene
         Scene scene = new Scene(vbox, 500, 475); // w x h
         primaryStage.setScene(scene);
@@ -109,7 +111,7 @@ public class Main extends Application {
         // Select the first row
         table.getSelectionModel().select(0);
         Book book = (Book) table.getSelectionModel().getSelectedItem();
-        actionStatus.setText(book.toString());
+//        actionStatus.setText(book.toString());
     }
 
 
@@ -136,7 +138,7 @@ public class Main extends Application {
         @Override
         public void handle(Event e) {
             // Create a new row after last row
-            Book book = new Book("...", "...","...");
+            Book book = new Book("...", "...", "...");
             data.add(book);
             int row = data.size() - 1;
             // Select the new row
@@ -146,6 +148,7 @@ public class Main extends Application {
             actionStatus.setText("New book: Enter title and author. Press .");
         }
     }
+
     private class DeleteButtonListener implements EventHandler {
         @Override
         public void handle(Event e) {
@@ -160,14 +163,13 @@ public class Main extends Application {
                 return;
             }
             if (ix != 0) {
-                ix = ix -1;
+                ix = ix - 1;
             }
             table.requestFocus();
             table.getSelectionModel().select(ix);
             table.getFocusModel().focus(ix);
         }
     }
-
 
 
     public static void main(String[] args) {
