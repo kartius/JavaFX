@@ -42,7 +42,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Low&Finance");
+        primaryStage.setTitle("Law&Finance");
         // Books label
         Label label = new Label("Clients");
         label.setTextFill(Color.DARKBLUE);
@@ -71,11 +71,28 @@ public class Main extends Application {
                 ).setTitle((String) t.getNewValue());
             }
         });
+
+
+        VBox taxBox = new VBox(10);
+        taxBox.getChildren().addAll(new Label("tax type"), taxType);
+
+        groupType.setItems(getInitialGroupTypeData());
+        groupType.getSelectionModel().selectFirst();
+        VBox groupBox = new VBox(10);
+        groupBox.getChildren().addAll(new Label("group type"), groupType);
+
+        HBox hComboBox = new HBox(30);
+        hComboBox.getChildren().addAll(taxBox, groupBox);
+
         TableColumn authorCol = new TableColumn("Company");
         authorCol.setCellValueFactory(new PropertyValueFactory("author"));
         TableColumn accountCol = new TableColumn("Account");
         accountCol.setCellValueFactory(new PropertyValueFactory("account"));
-        table.getColumns().setAll(titleCol, authorCol, accountCol);
+        TableColumn codeCol = new TableColumn("Code");
+        codeCol.setCellValueFactory(new PropertyValueFactory("code"));
+        TableColumn bankCol = new TableColumn("Bank");
+        bankCol.setCellValueFactory(new PropertyValueFactory("bank"));
+        table.getColumns().setAll(titleCol, authorCol, accountCol, codeCol, bankCol);
         table.setPrefWidth(450);
         table.setPrefHeight(300);
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -103,7 +120,7 @@ public class Main extends Application {
         VBox vbox = new VBox(20);
         vbox.setPadding(new Insets(25, 25, 25, 25));
         ;
-        vbox.getChildren().addAll(hb, taxType, groupType, table, buttonHb, actionStatus);
+        vbox.getChildren().addAll(hb, hComboBox, table, buttonHb, actionStatus);
         // Scene
         Scene scene = new Scene(vbox, 500, 475); // w x h
         primaryStage.setScene(scene);
@@ -117,18 +134,38 @@ public class Main extends Application {
 
     private ObservableList getInitialTableData() {
         List list = new ArrayList();
-        list.add(new Book("The Thief", "Fuminori Nakamura", "sdfsdfsdf"));
-        list.add(new Book("Of Human Bondage", "Somerset Maugham", ""));
-        list.add(new Book("The Bluest Eye", "Toni Morrison", ""));
-        list.add(new Book("I Am Ok You Are Ok", "Thomas Harris", ""));
-        list.add(new Book("Magnificent Obsession", "Lloyd C Douglas", ""));
-        list.add(new Book("100 Years of Solitude", "Gabriel Garcia Marquez", ""));
-        list.add(new Book("What the Dog Saw", "Malcolm Gladwell", ""));
-        list.add(new Book("The Fakir", "Ruzbeh Bharucha", ""));
-        list.add(new Book("The Hobbit", "J.R.R. Tolkien", ""));
-        list.add(new Book("Strange Life of Ivan Osokin", "P.D. Ouspensky", ""));
-        list.add(new Book("The Hunt for Red October", "Tom Clancy", ""));
-        list.add(new Book("Coma", "Robin Cook", ""));
+        list.add(new Book("The Thief", "Fuminori Nakamura", "sdfsdfsdf", "123","privat"));
+        list.add(new Book("Of Human Bondage", "Somerset Maugham", "", "123","privat"));
+        list.add(new Book("The Bluest Eye", "Toni Morrison", "", "123","privat"));
+        list.add(new Book("I Am Ok You Are Ok", "Thomas Harris", "", "123","privat"));
+        list.add(new Book("Magnificent Obsession", "Lloyd C Douglas", "", "123","privat"));
+        list.add(new Book("100 Years of Solitude", "Gabriel Garcia Marquez", "", "123","privat"));
+        list.add(new Book("What the Dog Saw", "Malcolm Gladwell", "", "123","privat"));
+        list.add(new Book("The Fakir", "Ruzbeh Bharucha", "", "123","privat"));
+        list.add(new Book("The Hobbit", "J.R.R. Tolkien", "", "123","privat"));
+        list.add(new Book("Strange Life of Ivan Osokin", "P.D. Ouspensky", "", "123","privat"));
+        list.add(new Book("The Hunt for Red October", "Tom Clancy", "", "123","privat"));
+        list.add(new Book("Coma", "Robin Cook", "", "123","privat"));
+        ObservableList data = FXCollections.observableList(list);
+        return data;
+    }
+
+    private ObservableList getInitialGroupTypeData() {
+        List<String> list = new ArrayList();
+        list.add("1");
+        list.add("2");
+        list.add("3");
+        list.add("4");
+        ObservableList data = FXCollections.observableList(list);
+        return data;
+    }
+
+    private ObservableList getInitialTaxTypeData() {
+        List<String> list = new ArrayList();
+        list.add("1");
+        list.add("2");
+        list.add("3");
+        list.add("4");
         ObservableList data = FXCollections.observableList(list);
         return data;
     }
@@ -138,7 +175,7 @@ public class Main extends Application {
         @Override
         public void handle(Event e) {
             // Create a new row after last row
-            Book book = new Book("...", "...", "...");
+            Book book = new Book("...", "...", "...", "...","...");
             data.add(book);
             int row = data.size() - 1;
             // Select the new row
